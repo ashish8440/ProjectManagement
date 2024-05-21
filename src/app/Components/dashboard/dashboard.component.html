@@ -1,0 +1,118 @@
+
+
+<div style="padding: 1%;">
+    <b>Project Plan</b> <br/>
+    <small> Project Mgmt. >> Project Plan</small> <br/><br/>
+    <div class='container'>
+        <mat-form-field >
+            <mat-label>Project Name</mat-label>
+            <mat-select [(value)]="prjSelected" >
+                @for (food of projectName; track food) {
+                <mat-option [value]="food.name">{{food.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field> &nbsp;&nbsp;
+
+        <mat-form-field>
+            <mat-label>Project Name</mat-label>
+            <mat-select [(value)]="subPrjSelected">
+                @for (food of subProjectName; track food) {
+                <mat-option [value]="food.name">{{food.name}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <span style="margin-left: 28%;"><mat-icon>add</mat-icon></span>   Add Project &nbsp;&nbsp;
+
+        <span><mat-icon>add</mat-icon></span>   Add Milestone/Task &nbsp;&nbsp;&nbsp;
+
+        <span><mat-icon> border_color</mat-icon></span>  &nbsp; Change Status &nbsp;&nbsp;
+
+        <span> <mat-icon>person_outline</mat-icon></span>   Assign &nbsp; &nbsp;
+
+        <span> <mat-icon>delete_outline</mat-icon></span>   Delete Project 
+
+
+
+            
+
+
+
+
+        
+        
+
+    </div>
+    <table mat-table
+       [dataSource]="dataSource" multiTemplateDataRows
+       class="mat-elevation-z8">
+       
+  @for (column of columnsToDisplay; track column) {
+    <ng-container matColumnDef="{{column}}">
+      <th mat-header-cell *matHeaderCellDef [style.background-color]="bgcolor" [style.color]="color"> {{column}} </th>
+        @if(column == 'startDate'){
+            <td mat-cell *matCellDef="let element"> {{element[column] | dataPipe}}</td>
+            
+        }@else if (column == 'endDate') {
+            <td mat-cell *matCellDef="let element"> {{element[column] | dataPipe}}</td>
+        } @else if (column == 'status') {
+            <td mat-cell *matCellDef="let element"> 
+            @if(element[column] == 'Pending') {
+                <button mat-raised-button  color="warn" (click)="changeValue(element)">Pending</button>
+            }  @else {
+                <!-- <button mat-raised-button disabled>Disabled</button> -->
+                <button mat-flat-button color="primary" (click)="changeValue(element)">Completed</button>
+            }  
+            </td>
+        }   
+         @else {
+            <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+        }
+
+      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+  }
+  
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions" [style.background-color]="bgcolor" [style.color]="color">Milestone/Task</th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+        @if (expandedElement === element) {
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        } @else {
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        }
+        <!-- <span class="example-element-description-attribution"> -- Wikipedia </span> -->
+      </button>
+      <span class="example-element-description-attribution"> {{element.title}} </span>
+    </td>
+  </ng-container>
+
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+      <div class="example-element-detail"
+           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <!-- <div class="example-element-diagram">
+          <div class="example-element-position"> {{element.position}} </div>
+          <div class="example-element-symbol"> {{element.symbol}} </div>
+          <div class="example-element-name"> {{element.name}} </div>
+          <div class="example-element-weight"> {{element.weight}} </div>
+        </div> -->
+        <div class="example-element-description">
+         Description:  {{element.description}}
+          <span class="example-element-description-attribution"> </span>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+  <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
+      class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+</table>
+</div>

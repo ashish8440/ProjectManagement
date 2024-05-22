@@ -17,6 +17,7 @@ export class DataServiceService {
   // private _url = './../../../assets/dummy.json';
 
   exclusive = new Subject<any>();
+  subExclusive = new Subject<any>();
 
 
   constructor(private http: HttpClient) {}

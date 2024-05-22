@@ -6,7 +6,7 @@ export interface IData {
   type: string;
   startDate: string;
   endDate: string;
-  status: string;
+  Status: string;
 }
 
 
